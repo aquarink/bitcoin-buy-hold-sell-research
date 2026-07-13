@@ -1,0 +1,9 @@
+numpy
+pandas
+pyarrow
+PyYAML
+matplotlib
+seaborn
+scikit-learn
+xgboost
+pytest

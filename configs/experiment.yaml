@@ -1,0 +1,41 @@
+random_seed: 42
+
+paths:
+  raw_data: data/raw/btcusd_1-min_data.csv
+  processed_1h: data/processed/btcusd_1h.parquet
+  featured_1h: data/processed/btcusd_1h_features.parquet
+  labeled_1h: data/processed/btcusd_1h_features_labels.parquet
+  reports_dir: reports
+  figures_dir: outputs/figures
+  metrics_dir: outputs/metrics
+  predictions_dir: outputs/predictions
+
+dataset:
+  timezone: UTC
+  base_timeframe: 1min
+  main_timeframe: 1h
+  optional_timeframes:
+    - 4h
+  final_holdout_start: 2026-01-01T00:00:00Z
+
+labels:
+  horizons_hours:
+    - 6
+    - 24
+  threshold_candidates:
+    - 0.0025
+    - 0.0050
+    - 0.0075
+    - 0.0100
+
+backtest:
+  fee: 0.0010
+  slippage: 0.0005
+  execution_price: next_open
+
+validation:
+  sliding_window_years: 4
+  sequence_lengths:
+    - 24
+    - 48
+    - 72
