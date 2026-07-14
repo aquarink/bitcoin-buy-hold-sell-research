@@ -98,7 +98,18 @@ Perintah ini akan:
 python3 run_pipeline.py --stage stage3-confidence-threshold
 ```
 
-### 6. Jalankan unit test
+### 6. Jalankan eksperimen target alternatif
+
+Contoh:
+
+```bash
+python3 run_pipeline.py --stage alt-targets --task binary-events
+python3 run_pipeline.py --stage alt-targets --task direction-24h
+python3 run_pipeline.py --stage alt-targets --task direction-24h-neutral
+python3 run_pipeline.py --stage alt-targets --task regime-24h
+```
+
+### 7. Jalankan unit test
 
 ```bash
 python3 -m pytest tests
@@ -121,6 +132,10 @@ python3 -m pytest tests
 - `outputs/predictions/stage3_predictions.parquet`
 - `outputs/predictions/stage3_dual_binary_predictions.parquet`
 - `outputs/predictions/stage3_confidence_predictions.parquet`
+- `outputs/metrics/alt_binary_event_metrics.csv`
+- `outputs/metrics/alt_direction_24h_metrics.csv`
+- `outputs/metrics/alt_direction_24h_neutral_metrics.csv`
+- `outputs/metrics/alt_regime_metrics.csv`
 - `outputs/figures/confusion_matrix_xgboost_expanding_test.png`
 - `outputs/figures/confusion_matrix_dual_binary_xgboost_expanding_test.png`
 - `outputs/figures/price_1h.png`

@@ -75,3 +75,12 @@ stage3:
   logistic_regression:
     C: 1.0
     max_iter: 1000
+
+alt_targets:
+  binary_event_horizon_hours: 6
+  binary_event_threshold: 0.005
+  regime_horizon_hours: 24
+  regime_threshold_candidates:
+    - 0.005
+    - 0.0075
+    - 0.01
