@@ -115,7 +115,19 @@ python3 run_pipeline.py --stage alt-targets --task regime-24h
 python3 run_pipeline.py --stage ensemble
 ```
 
-### 8. Jalankan unit test
+### 8. Jalankan eksperimen LSTM
+
+```bash
+python3 run_pipeline.py --stage stage4-lstm
+```
+
+Catatan:
+
+- implementasi saat ini adalah `pilot CPU-friendly`;
+- fold yang dijalankan dibatasi ke `2023-2025`;
+- ini dilakukan agar eksperimen DL tetap bisa selesai stabil di environment saat ini.
+
+### 9. Jalankan unit test
 
 ```bash
 python3 -m pytest tests
@@ -145,6 +157,8 @@ python3 -m pytest tests
 - `outputs/metrics/ensemble_selection.csv`
 - `outputs/metrics/ensemble_classification_metrics.csv`
 - `outputs/metrics/ensemble_backtest_metrics.csv`
+- `outputs/metrics/stage4_lstm_classification_metrics.csv`
+- `outputs/metrics/stage4_lstm_backtest_metrics.csv`
 - `outputs/figures/confusion_matrix_xgboost_expanding_test.png`
 - `outputs/figures/confusion_matrix_dual_binary_xgboost_expanding_test.png`
 - `outputs/figures/price_1h.png`

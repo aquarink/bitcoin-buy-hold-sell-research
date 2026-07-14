@@ -44,6 +44,19 @@
 - Ensemble menaikkan metrik klasifikasi test dibanding `XGBoost` tunggal.
 - Namun hasil trading setelah biaya masih buruk, sehingga ensemble belum menyelesaikan masalah profitabilitas.
 
+### Penambahan pilot LSTM
+
+- Ditambahkan runner `stage4-lstm` berbasis `PyTorch`.
+- Environment memerlukan `numpy<2` agar kompatibel dengan wheel `torch` yang tersedia.
+- Untuk stabilitas runtime, eksperimen awal dibatasi ke fold test `2023-2025` dengan arsitektur kecil dan epoch terbatas.
+
+### Hasil awal LSTM
+
+- Pada fold terbaru `2023-2025`, LSTM memberi rata-rata:
+  - accuracy sekitar `43.94%`
+  - macro F1 sekitar `35.10%`
+- Dari sisi backtest, LSTM masih negatif tetapi jauh lebih baik daripada multiclass `XGBoost` mentah.
+
 ### Penghapusan folder tidak terpakai
 
 - Folder `notebooks/` dihapus.

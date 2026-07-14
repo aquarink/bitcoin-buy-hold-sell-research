@@ -470,6 +470,68 @@ Interpretasi:
    - “ensemble improves classification”
    - “ensemble does not necessarily improve trading performance”
 
+## 24. Pilot LSTM
+
+Karena environment awal tidak memiliki framework deep learning, implementasi `LSTM` dilakukan dengan `PyTorch`.
+
+Untuk menjaga eksperimen tetap selesai dan stabil:
+
+- digunakan arsitektur kecil;
+- sequence length utama `24`;
+- eksperimen dibatasi ke fold terbaru `2023-2025`;
+- training dijalankan di CPU.
+
+### Setup
+
+| Komponen | Nilai |
+|---|---|
+| Sequence length | `24` |
+| Hidden size | `32` |
+| Num layers | `1` |
+| Dropout | `0.2` |
+| Batch size | `128` |
+| Max epochs | `5` |
+| Patience | `2` |
+| Fold test | `2023`, `2024`, `2025` |
+
+### Hasil klasifikasi test LSTM
+
+Rata-rata fold test `2023-2025`:
+
+| Metric | Nilai |
+|---|---:|
+| Accuracy | `43.94%` |
+| Balanced Accuracy | `40.50%` |
+| Macro F1 | `35.10%` |
+| Weighted F1 | `40.81%` |
+| MCC | `0.1346` |
+
+### Perbandingan terhadap XGBoost pada fold terbaru
+
+| Fold | XGBoost Accuracy | LSTM Accuracy | XGBoost Macro F1 | LSTM Macro F1 |
+|---|---:|---:|---:|---:|
+| 2023 | 42.55% | 47.33% | 39.47% | 39.11% |
+| 2024 | 35.89% | 40.87% | 34.46% | 32.24% |
+| 2025 | 35.48% | 43.62% | 32.69% | 33.94% |
+
+Interpretasi:
+
+- `LSTM` memberi accuracy lebih tinggi pada semua fold terbaru yang diuji;
+- `Macro F1` LSTM kompetitif, tetapi tidak selalu mengalahkan `XGBoost`;
+- ini menunjukkan sequence model memang menangkap sebagian konteks temporal yang tidak tertangkap model tabular.
+
+### Hasil backtesting LSTM
+
+| Model | Total Return | Sharpe | Max Drawdown | Trades |
+|---|---:|---:|---:|---:|
+| LSTM pilot | -23.24% | -0.2554 | -0.4454 | 435 |
+
+Interpretasi:
+
+1. `LSTM` masih belum profitable pada setup ini.
+2. Namun hasil tradingnya jauh lebih baik daripada multiclass `XGBoost` mentah yang hampir habis setelah biaya.
+3. Ini membuat `LSTM` layak dipertahankan sebagai pembanding deep learning dalam skripsi, walaupun belum menjadi model trading terbaik.
+
 ## File Hasil Terkait
 
 - Metrik klasifikasi: [outputs/metrics/stage3_classification_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage3_classification_metrics.csv)
@@ -486,5 +548,7 @@ Interpretasi:
 - Seleksi ensemble: [outputs/metrics/ensemble_selection.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/ensemble_selection.csv)
 - Metrik ensemble: [outputs/metrics/ensemble_classification_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/ensemble_classification_metrics.csv)
 - Backtest ensemble: [outputs/metrics/ensemble_backtest_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/ensemble_backtest_metrics.csv)
+- Metrik LSTM: [outputs/metrics/stage4_lstm_classification_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage4_lstm_classification_metrics.csv)
+- Backtest LSTM: [outputs/metrics/stage4_lstm_backtest_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage4_lstm_backtest_metrics.csv)
 - Confusion matrix XGBoost test: [confusion_matrix_xgboost_expanding_test.png](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/figures/confusion_matrix_xgboost_expanding_test.png)
 - Confusion matrix dual-binary XGBoost test: [confusion_matrix_dual_binary_xgboost_expanding_test.png](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/figures/confusion_matrix_dual_binary_xgboost_expanding_test.png)

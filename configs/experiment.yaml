@@ -42,7 +42,6 @@ validation:
   sequence_lengths:
     - 24
     - 48
-    - 72
 
 stage3:
   primary_horizon_hours: 6
@@ -84,3 +83,18 @@ alt_targets:
     - 0.005
     - 0.0075
     - 0.01
+
+stage4:
+  fold_test_years:
+    - 2023
+    - 2024
+    - 2025
+  enabled_sequence_lengths:
+    - 24
+  hidden_size: 32
+  num_layers: 1
+  dropout: 0.2
+  batch_size: 128
+  learning_rate: 0.001
+  max_epochs: 5
+  patience: 2

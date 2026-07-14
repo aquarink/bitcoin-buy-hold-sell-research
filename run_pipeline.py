@@ -12,6 +12,7 @@ from src.stage_ensemble_runner import run_stage_ensemble
 from src.stage3_confidence_runner import run_stage3_confidence
 from src.stage3_dual_binary_runner import run_stage3_dual_binary
 from src.stage3_runner import run_stage3
+from src.stage4_lstm_runner import run_stage4_lstm
 from src.visualization import plot_hourly_eda
 
 
@@ -52,7 +53,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--stage",
         default="prepare-data",
-        choices=["prepare-data", "stage3-classical", "stage3-dual-binary", "stage3-confidence-threshold", "alt-targets", "ensemble"],
+        choices=["prepare-data", "stage3-classical", "stage3-dual-binary", "stage3-confidence-threshold", "alt-targets", "ensemble", "stage4-lstm"],
         help="Pipeline stage to run.",
     )
     parser.add_argument("--config", default=None, help="Optional config path.")
@@ -85,6 +86,9 @@ def main() -> None:
         return
     if args.stage == "ensemble":
         run_stage_ensemble(args.config)
+        return
+    if args.stage == "stage4-lstm":
+        run_stage4_lstm(args.config)
         return
     raise ValueError(f"Unsupported stage: {args.stage}")
 
