@@ -416,6 +416,60 @@ Interpretasi penting:
 - Threshold confidence dipilih dari validation, jadi metodologinya masih valid untuk tahap pengembangan.
 - Meski hasil trading membaik, klaim profitabilitas tetap belum boleh dibuat sebelum final holdout dan sensitivity analysis biaya.
 
+## 23. Eksperimen Ensemble
+
+Eksperimen ini menggabungkan probabilitas model yang sudah ada melalui `weighted soft voting`, tanpa melatih ulang base model.
+
+Base model yang digabung:
+
+- `logistic_regression`
+- `xgboost`
+- `dual_binary_logistic_regression`
+- `dual_binary_xgboost`
+
+### Seleksi Bobot di Validation
+
+Kombinasi terbaik di validation adalah:
+
+```text
+0.5 * Logistic Regression + 0.5 * XGBoost
+```
+
+Ringkasan kandidat teratas:
+
+| Weights | Mean Macro F1 | Mean Balanced Accuracy | Mean Validation Backtest Return |
+|---|---:|---:|---:|
+| `0.5 LR + 0.5 XGB` | 0.3853 | 0.4067 | -0.6345 |
+| `1.0 XGB` | 0.3842 | 0.4078 | -0.6744 |
+| `1.0 LR` | 0.3647 | 0.3887 | -0.6264 |
+
+### Hasil Test Ensemble
+
+| Model | Accuracy | Balanced Accuracy | Macro F1 |
+|---|---:|---:|---:|
+| XGBoost multiclass | 36.36% | 38.42% | 33.02% |
+| Ensemble `0.5 LR + 0.5 XGB` | 37.69% | 39.50% | 36.96% |
+
+Interpretasi:
+
+- ensemble meningkatkan semua metrik klasifikasi utama dibanding `XGBoost` tunggal;
+- ini adalah bukti bahwa ensemble memang berguna untuk tugas prediksi kelas;
+- tetapi peningkatan klasifikasi tidak cukup besar untuk mengubah karakter dasar masalah.
+
+### Hasil Backtesting Ensemble
+
+| Model | Total Return | Sharpe | Max Drawdown | Trades |
+|---|---:|---:|---:|---:|
+| Ensemble `0.5 LR + 0.5 XGB` | -99.91% | -2.4628 | -0.9991 | 3281 |
+
+Interpretasi:
+
+1. Ensemble membantu klasifikasi, tetapi tidak membantu hasil trading.
+2. Overtrading dan biaya transaksi masih menjadi masalah utama.
+3. Untuk tujuan skripsi, ensemble tetap layak dipertahankan sebagai hasil metodologis yang sah:
+   - “ensemble improves classification”
+   - “ensemble does not necessarily improve trading performance”
+
 ## File Hasil Terkait
 
 - Metrik klasifikasi: [outputs/metrics/stage3_classification_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage3_classification_metrics.csv)
@@ -429,5 +483,8 @@ Interpretasi penting:
 - Metrik confidence threshold: [outputs/metrics/stage3_confidence_classification_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage3_confidence_classification_metrics.csv)
 - Backtest confidence threshold: [outputs/metrics/stage3_confidence_backtest_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage3_confidence_backtest_metrics.csv)
 - Prediksi confidence threshold: [outputs/predictions/stage3_confidence_predictions.parquet](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/predictions/stage3_confidence_predictions.parquet)
+- Seleksi ensemble: [outputs/metrics/ensemble_selection.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/ensemble_selection.csv)
+- Metrik ensemble: [outputs/metrics/ensemble_classification_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/ensemble_classification_metrics.csv)
+- Backtest ensemble: [outputs/metrics/ensemble_backtest_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/ensemble_backtest_metrics.csv)
 - Confusion matrix XGBoost test: [confusion_matrix_xgboost_expanding_test.png](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/figures/confusion_matrix_xgboost_expanding_test.png)
 - Confusion matrix dual-binary XGBoost test: [confusion_matrix_dual_binary_xgboost_expanding_test.png](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/figures/confusion_matrix_dual_binary_xgboost_expanding_test.png)

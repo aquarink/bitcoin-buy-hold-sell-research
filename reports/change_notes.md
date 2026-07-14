@@ -32,6 +32,18 @@
 - Hasilnya masih belum mendekati target akurasi tinggi seperti `70%+`.
 - Task yang paling stabil sejauh ini masih cenderung berada di kisaran `49%-59%` accuracy, tergantung definisi target.
 
+### Penambahan runner ensemble
+
+- Ditambahkan runner `ensemble` berbasis weighted soft-voting.
+- Ensemble dibangun dari probabilitas model yang sudah ada, tanpa melatih ulang base model.
+- Seleksi bobot dilakukan di validation pra-2026 agar tetap bebas leakage.
+
+### Hasil awal ensemble
+
+- Kombinasi terbaik validation adalah `0.5 * Logistic Regression + 0.5 * XGBoost`.
+- Ensemble menaikkan metrik klasifikasi test dibanding `XGBoost` tunggal.
+- Namun hasil trading setelah biaya masih buruk, sehingga ensemble belum menyelesaikan masalah profitabilitas.
+
 ### Penghapusan folder tidak terpakai
 
 - Folder `notebooks/` dihapus.

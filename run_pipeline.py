@@ -8,6 +8,7 @@ from src.features import build_features
 from src.labels import append_label_columns
 from src.preprocessing import preprocess_minute_to_hourly
 from src.stage_alt_targets_runner import run_alt_targets
+from src.stage_ensemble_runner import run_stage_ensemble
 from src.stage3_confidence_runner import run_stage3_confidence
 from src.stage3_dual_binary_runner import run_stage3_dual_binary
 from src.stage3_runner import run_stage3
@@ -51,7 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--stage",
         default="prepare-data",
-        choices=["prepare-data", "stage3-classical", "stage3-dual-binary", "stage3-confidence-threshold", "alt-targets"],
+        choices=["prepare-data", "stage3-classical", "stage3-dual-binary", "stage3-confidence-threshold", "alt-targets", "ensemble"],
         help="Pipeline stage to run.",
     )
     parser.add_argument("--config", default=None, help="Optional config path.")
@@ -81,6 +82,9 @@ def main() -> None:
         return
     if args.stage == "alt-targets":
         run_alt_targets(args.config, task=args.task)
+        return
+    if args.stage == "ensemble":
+        run_stage_ensemble(args.config)
         return
     raise ValueError(f"Unsupported stage: {args.stage}")
 
