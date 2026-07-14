@@ -4,7 +4,7 @@ Proyek ini meneliti prediksi sinyal `BUY`, `HOLD`, dan `SELL` Bitcoin dari data 
 
 ## Status
 
-Tahap aktif saat ini: `Tahap 2 - preprocessing, resampling, feature engineering, label generation, dan temporal splitter`.
+Tahap aktif saat ini: `Tahap 3 - baseline, Logistic Regression, XGBoost, evaluasi klasifikasi, dan backtesting`.
 
 Model utama belum boleh dilatih sebelum:
 
@@ -58,7 +58,47 @@ Perintah ini akan:
 python3 run_pipeline.py --stage prepare-data
 ```
 
-### 3. Jalankan unit test
+### 3. Jalankan eksperimen klasik Tahap 3
+
+Perintah ini akan:
+
+- memilih threshold kandidat utama untuk horizon `6 jam` pada expanding window pra-2026;
+- menjalankan baseline, `Logistic Regression`, dan `XGBoost`;
+- menyimpan metrik klasifikasi;
+- menyimpan prediksi per fold;
+- menjalankan backtesting long/flat setelah fee dan slippage.
+
+```bash
+python3 run_pipeline.py --stage stage3-classical
+```
+
+### 4. Jalankan eksperimen dual-binary BUY/SELL dengan HOLD fallback
+
+Perintah ini akan:
+
+- memakai threshold utama Tahap 3 yang sama;
+- melatih model biner `BUY vs non-BUY` dan `SELL vs non-SELL`;
+- menggabungkan hasil dengan aturan `HOLD` fallback;
+- menyimpan metrik klasifikasi, prediksi, dan backtest.
+
+```bash
+python3 run_pipeline.py --stage stage3-dual-binary
+```
+
+### 5. Jalankan eksperimen confidence threshold
+
+Perintah ini akan:
+
+- membaca prediksi Tahap 3 yang sudah ada;
+- menguji threshold probabilitas untuk membuat model lebih selektif;
+- memilih threshold berdasarkan validation;
+- menyimpan metrik klasifikasi dan backtest hasil filtering.
+
+```bash
+python3 run_pipeline.py --stage stage3-confidence-threshold
+```
+
+### 6. Jalankan unit test
 
 ```bash
 python3 -m pytest tests
@@ -70,6 +110,19 @@ python3 -m pytest tests
 - `data/processed/btcusd_1h_features.parquet`
 - `data/processed/btcusd_1h_features_labels.parquet`
 - `outputs/metrics/hourly_yearly_stats.csv`
+- `outputs/metrics/threshold_selection_expanding.csv`
+- `outputs/metrics/stage3_classification_metrics.csv`
+- `outputs/metrics/stage3_backtest_metrics.csv`
+- `outputs/metrics/stage3_dual_binary_classification_metrics.csv`
+- `outputs/metrics/stage3_dual_binary_backtest_metrics.csv`
+- `outputs/metrics/stage3_confidence_threshold_selection.csv`
+- `outputs/metrics/stage3_confidence_classification_metrics.csv`
+- `outputs/metrics/stage3_confidence_backtest_metrics.csv`
+- `outputs/predictions/stage3_predictions.parquet`
+- `outputs/predictions/stage3_dual_binary_predictions.parquet`
+- `outputs/predictions/stage3_confidence_predictions.parquet`
+- `outputs/figures/confusion_matrix_xgboost_expanding_test.png`
+- `outputs/figures/confusion_matrix_dual_binary_xgboost_expanding_test.png`
 - `outputs/figures/price_1h.png`
 - `outputs/figures/volume_1h.png`
 - `outputs/figures/return_1h.png`
@@ -96,6 +149,7 @@ python3 -m pytest tests
 - Tidak ada `random train-test split`.
 - Semua split berdasarkan waktu.
 - Fitur hanya boleh memakai informasi sampai waktu `t`.
+- Eksperimen model utama saat ini dibatasi ke data `>= 2015-01-01 UTC`.
 - Data tahun 2026 untuk final holdout tidak boleh dipakai dalam pemilihan model.
 - Seed utama: `42`.
 - `Macro F1` menjadi metrik klasifikasi utama, bukan accuracy saja.
@@ -122,9 +176,11 @@ python3 -m pytest tests
 - Rencana metodologi: [reports/methodology.md](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/reports/methodology.md)
 - Kamus fitur: [reports/feature_dictionary.md](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/reports/feature_dictionary.md)
 - Dokumentasi label: [reports/label_documentation.md](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/reports/label_documentation.md)
+- Hasil eksperimen sementara: [reports/experiment_results.md](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/reports/experiment_results.md)
+- Limitasi sementara: [reports/limitations.md](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/reports/limitations.md)
 
 ## Batas Tahap Saat Ini
 
-- Baseline, Logistic Regression, XGBoost, dan LSTM belum dijalankan.
-- Threshold label belum dipilih final karena pemilihannya harus berdasarkan validation pra-2026.
+- LSTM belum dijalankan.
+- Threshold label baru dipilih untuk setup utama Tahap 3, belum untuk seluruh eksperimen lanjutan.
 - Final holdout `2026 Q1` belum disentuh untuk evaluasi model.

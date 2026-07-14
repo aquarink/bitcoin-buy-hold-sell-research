@@ -7,6 +7,9 @@ from src.config import load_config, resolve_path
 from src.features import build_features
 from src.labels import append_label_columns
 from src.preprocessing import preprocess_minute_to_hourly
+from src.stage3_confidence_runner import run_stage3_confidence
+from src.stage3_dual_binary_runner import run_stage3_dual_binary
+from src.stage3_runner import run_stage3
 from src.visualization import plot_hourly_eda
 
 
@@ -47,7 +50,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--stage",
         default="prepare-data",
-        choices=["prepare-data"],
+        choices=["prepare-data", "stage3-classical", "stage3-dual-binary", "stage3-confidence-threshold"],
         help="Pipeline stage to run.",
     )
     parser.add_argument("--config", default=None, help="Optional config path.")
@@ -59,6 +62,15 @@ def main() -> None:
     args = parser.parse_args()
     if args.stage == "prepare-data":
         run_prepare_data(args.config)
+        return
+    if args.stage == "stage3-classical":
+        run_stage3(args.config)
+        return
+    if args.stage == "stage3-dual-binary":
+        run_stage3_dual_binary(args.config)
+        return
+    if args.stage == "stage3-confidence-threshold":
+        run_stage3_confidence(args.config)
         return
     raise ValueError(f"Unsupported stage: {args.stage}")
 

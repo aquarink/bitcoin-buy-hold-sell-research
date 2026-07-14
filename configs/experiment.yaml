@@ -16,7 +16,11 @@ dataset:
   main_timeframe: 1h
   optional_timeframes:
     - 4h
+  experiment_min_datetime: 2015-01-01T00:00:00Z
   final_holdout_start: 2026-01-01T00:00:00Z
+  experiment_start_year: 2015
+  validation_start_year: 2018
+  last_pre_holdout_year: 2025
 
 labels:
   horizons_hours:
@@ -39,3 +43,35 @@ validation:
     - 24
     - 48
     - 72
+
+stage3:
+  primary_horizon_hours: 6
+  threshold_selection_window: expanding
+  selected_threshold: null
+  confidence_threshold_candidates:
+    - 0.40
+    - 0.45
+    - 0.50
+    - 0.55
+    - 0.60
+    - 0.65
+  xgboost_grid:
+    - n_estimators: 200
+      max_depth: 4
+      learning_rate: 0.05
+      subsample: 0.8
+      colsample_bytree: 0.8
+      min_child_weight: 2
+      reg_alpha: 0.0
+      reg_lambda: 1.0
+    - n_estimators: 300
+      max_depth: 5
+      learning_rate: 0.05
+      subsample: 0.9
+      colsample_bytree: 0.8
+      min_child_weight: 3
+      reg_alpha: 0.0
+      reg_lambda: 1.0
+  logistic_regression:
+    C: 1.0
+    max_iter: 1000

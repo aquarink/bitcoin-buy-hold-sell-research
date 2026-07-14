@@ -87,8 +87,14 @@ Membangun pipeline penelitian yang dapat diulang untuk memprediksi sinyal `BUY/H
 - Timeframe 1 jam tetap cukup kaya sinyal, tetapi lebih realistis untuk:
   - XGBoost tabular
   - LSTM sequence
-  - walk-forward multi-fold
-  - backtesting berulang
+- walk-forward multi-fold
+- backtesting berulang
+
+### Mengapa eksperimen utama dibatasi ke 2015 ke atas
+
+- `2012` memiliki proporsi `zero volume` yang sangat tinggi dan kualitas ekonominya paling meragukan.
+- Tahun `2013-2014` lebih baik daripada `2012`, tetapi tetap mewakili fase pasar Bitcoin yang sangat awal.
+- Untuk skripsi S1 yang fokus pada validitas eksperimen dan generalisasi yang lebih modern, memulai eksperimen dari `2015-01-01 UTC` lebih defensible.
 
 ### Mengapa tidak langsung memakai data 2026 untuk tuning
 
