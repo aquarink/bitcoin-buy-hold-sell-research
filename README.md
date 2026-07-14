@@ -219,6 +219,6 @@ python3 -m pytest tests
 
 ## Batas Tahap Saat Ini
 
-- LSTM belum dijalankan.
+- `LSTM` baru dijalankan sebagai pilot CPU-friendly pada fold `2023-2025`, belum pada seluruh fold walk-forward.
 - Threshold label baru dipilih untuk setup utama Tahap 3, belum untuk seluruh eksperimen lanjutan.
 - Final holdout `2026 Q1` belum disentuh untuk evaluasi model.

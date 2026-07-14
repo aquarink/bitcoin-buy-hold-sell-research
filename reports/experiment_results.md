@@ -532,6 +532,24 @@ Interpretasi:
 2. Namun hasil tradingnya jauh lebih baik daripada multiclass `XGBoost` mentah yang hampir habis setelah biaya.
 3. Ini membuat `LSTM` layak dipertahankan sebagai pembanding deep learning dalam skripsi, walaupun belum menjadi model trading terbaik.
 
+## 25. Tabel Perbandingan Final Empat Model
+
+Untuk perbandingan yang adil, tabel ini menyatukan hanya fold test `2023-2025`, karena `LSTM` yang tersedia saat ini baru dijalankan pada tiga fold terbaru tersebut.
+
+| Model | Scope | Accuracy | Precision BUY | Recall BUY | F1 BUY | Precision HOLD | Recall HOLD | F1 HOLD | Precision SELL | Recall SELL | F1 SELL | Macro F1 | Sharpe | Total Return |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| XGBoost | 2023-2025 test folds | 37.97% | 29.37% | 22.30% | 25.03% | 69.02% | 31.53% | 42.90% | 27.27% | 66.98% | 38.70% | 35.54% | -5.54 | -98.26% |
+| Ensemble `0.5 LR + 0.5 XGB` | 2023-2025 test folds | 38.80% | 33.63% | 14.78% | 20.53% | 66.82% | 36.74% | 47.41% | 26.88% | 69.87% | 38.82% | 35.59% | -4.25 | -94.06% |
+| Logistic + Confidence `0.65` | 2023-2025 test folds | 50.79% | 100.00% | 0.06% | 0.12% | 50.79% | 99.98% | 67.36% | 20.00% | 0.02% | 0.03% | 22.50% | 1.25 | 96.66% |
+| LSTM pilot | 2023-2025 test folds | 43.94% | 43.36% | 17.94% | 13.54% | 61.79% | 54.55% | 57.86% | 29.49% | 49.02% | 33.89% | 35.10% | -0.26 | -23.24% |
+
+Interpretasi:
+
+1. `Logistic + confidence threshold` memberi accuracy dan return tertinggi pada scope ini, tetapi itu terjadi karena model hampir selalu memprediksi `HOLD`, sehingga kemampuan deteksi `BUY` dan `SELL` sangat lemah.
+2. `LSTM` memberi kompromi yang lebih seimbang antara metrik klasifikasi dan hasil trading dibanding `XGBoost` mentah maupun ensemble sederhana.
+3. `Ensemble` sedikit membantu accuracy terhadap `XGBoost`, tetapi belum menyelesaikan masalah overtrading setelah fee dan slippage.
+4. Jika tabel ini dipakai di skripsi, perlu ditegaskan bahwa accuracy tinggi tidak otomatis berarti kualitas sinyal `BUY`/`SELL` tinggi.
+
 ## File Hasil Terkait
 
 - Metrik klasifikasi: [outputs/metrics/stage3_classification_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage3_classification_metrics.csv)
@@ -550,5 +568,6 @@ Interpretasi:
 - Backtest ensemble: [outputs/metrics/ensemble_backtest_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/ensemble_backtest_metrics.csv)
 - Metrik LSTM: [outputs/metrics/stage4_lstm_classification_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage4_lstm_classification_metrics.csv)
 - Backtest LSTM: [outputs/metrics/stage4_lstm_backtest_metrics.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/stage4_lstm_backtest_metrics.csv)
+- Perbandingan final 2023-2025: [outputs/metrics/final_model_comparison_recent.csv](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/metrics/final_model_comparison_recent.csv)
 - Confusion matrix XGBoost test: [confusion_matrix_xgboost_expanding_test.png](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/figures/confusion_matrix_xgboost_expanding_test.png)
 - Confusion matrix dual-binary XGBoost test: [confusion_matrix_dual_binary_xgboost_expanding_test.png](/Volumes/SSD%20850/PROJECTS/signal-bu-sell/outputs/figures/confusion_matrix_dual_binary_xgboost_expanding_test.png)
